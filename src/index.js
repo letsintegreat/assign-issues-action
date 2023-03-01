@@ -25,46 +25,50 @@ const run = async () => {
                 assignees,
             })
         } else {
-            await octokit.paginate(octokit.issues.listEventsForRepo, {
+            console.log(await octokit.issues.get({
                 owner,
-                repo,
-                per_page: 100,
-            }, response => response.data.filter(r => r.event == "assigned")
-            ).then((data) => {
-                for (const event of data) {
-                    console.log(event.issue);
-                    // if (event.issue.assignee && event.issue.state == "open") {
+                repo
+            }));
+            // await octokit.paginate(octokit.issues.listEventsForRepo, {
+            //     owner,
+            //     repo,
+            //     per_page: 100,
+            // }, response => response.data.filter(r => r.event == "assigned")
+            // ).then((data) => {
+            //     for (const event of data) {
+            //         console.log(event.issue);
+            //         // if (event.issue.assignee && event.issue.state == "open") {
                         
-                    //     if (last_event.issue.number != event.issue.number) {
+            //         //     if (last_event.issue.number != event.issue.number) {
     
-                    //         console.log(
-                    //             event.created_at + " " +
-                    //             event.issue.number + " " +
-                    //             event.assignee.login + " " +
-                    //             event.issue.assignee.login + " " +
-                    //             event.issue.state + " " +
-                    //             (Difference_In_Time / (1000 * 3600 * 24)).toString() + " days",
-                    //         );
+            //         //         console.log(
+            //         //             event.created_at + " " +
+            //         //             event.issue.number + " " +
+            //         //             event.assignee.login + " " +
+            //         //             event.issue.assignee.login + " " +
+            //         //             event.issue.state + " " +
+            //         //             (Difference_In_Time / (1000 * 3600 * 24)).toString() + " days",
+            //         //         );
     
-                    //         if (Difference_In_Time / (1000 * 3600 * 24) > 3) {
-                    //             console.log('unassigning ' + event.issue.assignee.login + " from " + event.issue.number);
+            //         //         if (Difference_In_Time / (1000 * 3600 * 24) > 3) {
+            //         //             console.log('unassigning ' + event.issue.assignee.login + " from " + event.issue.number);
     
-                    //             const assignees = event.issue.assignee.login.split(',').map((assigneeName) => assigneeName.trim());
+            //         //             const assignees = event.issue.assignee.login.split(',').map((assigneeName) => assigneeName.trim());
     
-                    //             var issue_number = event.issue.number;
+            //         //             var issue_number = event.issue.number;
     
-                    //             octokit.issues.removeAssignees({
-                    //                 owner,
-                    //                 repo,
-                    //                 issue_number,
-                    //                 assignees,
-                    //             })
-                    //         }
-                    //     }
-                    // }
-                    // last_event = event;
-                }
-            });
+            //         //             octokit.issues.removeAssignees({
+            //         //                 owner,
+            //         //                 repo,
+            //         //                 issue_number,
+            //         //                 assignees,
+            //         //             })
+            //         //         }
+            //         //     }
+            //         // }
+            //         // last_event = event;
+            //     }
+            // });
             await octokit.issues.addAssignees({
                 owner,
                 repo,
