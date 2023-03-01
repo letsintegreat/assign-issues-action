@@ -37,7 +37,7 @@ const run = async () => {
                         if (event.issue.id == issue.id) {
                             return;
                         }
-                        for (var assignedUser in event.issue.assignees) {
+                        for (var assignedUser of event.issue.assignees) {
                             console.log(assignedUser.login);
                             console.log(comment.user.login);
                             if (assignedUser.login == comment.user.login) {
