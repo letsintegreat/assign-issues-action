@@ -25,10 +25,12 @@ const run = async () => {
                 assignees,
             })
         } else {
-            console.log(await octokit.issues.get({
+            await octokit.issues.get({
                 owner,
                 repo
-            }));
+            }).then((data) => {
+                console.log(data);
+            });
             // await octokit.paginate(octokit.issues.listEventsForRepo, {
             //     owner,
             //     repo,
