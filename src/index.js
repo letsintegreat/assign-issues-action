@@ -30,39 +30,25 @@ const run = async () => {
                 repo,
                 per_page: 100,
             }, response => response.data.filter(r => r.event == "assigned")
-            ).then((data) => {
+            ).then(async (data) => {
                 for (const event of data) {
                     console.log(event.issue);
-                    // if (event.issue.assignee && event.issue.state == "open") {
-                        
-                    //     if (last_event.issue.number != event.issue.number) {
-    
-                    //         console.log(
-                    //             event.created_at + " " +
-                    //             event.issue.number + " " +
-                    //             event.assignee.login + " " +
-                    //             event.issue.assignee.login + " " +
-                    //             event.issue.state + " " +
-                    //             (Difference_In_Time / (1000 * 3600 * 24)).toString() + " days",
-                    //         );
-    
-                    //         if (Difference_In_Time / (1000 * 3600 * 24) > 3) {
-                    //             console.log('unassigning ' + event.issue.assignee.login + " from " + event.issue.number);
-    
-                    //             const assignees = event.issue.assignee.login.split(',').map((assigneeName) => assigneeName.trim());
-    
-                    //             var issue_number = event.issue.number;
-    
-                    //             octokit.issues.removeAssignees({
-                    //                 owner,
-                    //                 repo,
-                    //                 issue_number,
-                    //                 assignees,
-                    //             })
-                    //         }
-                    //     }
-                    // }
-                    // last_event = event;
+                    if (event.issue.assignee && event.issue.state == "open") {
+                        if (event.issue.id == issue.id) {
+                            return;
+                        }
+                        for (var assignedUser in event.issue.assignees) {
+                            if (assignedUser.login == comment.user.login) {
+                                await octokit.issues.createComment({
+                                    owner,
+                                    repo,
+                                    issue_number: issue.number,
+                                    body: "You are already assigned to another [open issue](" + event.issue.html_url + "), please wait until until its closed or remove your assignment to get assigned to this issue."
+                                });
+                                return;
+                            }
+                        }
+                    }
                 }
             });
             await octokit.issues.addAssignees({
