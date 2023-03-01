@@ -32,12 +32,14 @@ const run = async () => {
             }, response => response.data.filter(r => r.event == "assigned")
             ).then(async (data) => {
                 for (const event of data) {
-                    console.log(event.issue);
+                    // console.log(event.issue);
                     if (event.issue.assignee && event.issue.state == "open") {
                         if (event.issue.id == issue.id) {
                             return;
                         }
                         for (var assignedUser in event.issue.assignees) {
+                            console.log(assignedUser.login);
+                            console.log(comment.user.login);
                             if (assignedUser.login == comment.user.login) {
                                 await octokit.issues.createComment({
                                     owner,
